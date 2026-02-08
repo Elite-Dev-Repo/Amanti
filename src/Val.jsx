@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import html2canvas from "html2canvas";
 import { Toaster, toast } from "sonner";
@@ -38,7 +38,8 @@ const Val = () => {
                       Make it ${formData.style}, sweet, and intimate. Max 165 words.`;
 
       const result = await model.generateContent(prompt);
-      setGeneratedNote(result.response.text());
+      setGeneratedNote(result.response.text().trim());
+
       setShowModal(true);
     } catch (error) {
       console.log(error);
@@ -62,25 +63,25 @@ const Val = () => {
     }
   };
 
-  // Add this inside your Val component
-  useEffect(() => {
-    const checkModels = async () => {
-      try {
-        // Note: Some SDK versions don't expose listModels directly on the genAI object
-        // This is the standard way for the web SDK:
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
-        );
-        const data = await response.json();
-        console.log("--- AVAILABLE MODELS ---");
-        data.models.forEach((m) => console.log(m.name.replace("models/", "")));
-        console.log("-------------------------");
-      } catch (err) {
-        console.error("Could not fetch model list", err);
-      }
-    };
-    checkModels();
-  }, []);
+  // // Add this inside your Val component
+  // useEffect(() => {
+  //   const checkModels = async () => {
+  //     try {
+  //       // Note: Some SDK versions don't expose listModels directly on the genAI object
+  //       // This is the standard way for the web SDK:
+  //       const response = await fetch(
+  //         `https://generativelanguage.googleapis.com/v1beta/models?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+  //       );
+  //       const data = await response.json();
+  //       console.log("--- AVAILABLE MODELS ---");
+  //       data.models.forEach((m) => console.log(m.name.replace("models/", "")));
+  //       console.log("-------------------------");
+  //     } catch (err) {
+  //       console.error("Could not fetch model list", err);
+  //     }
+  //   };
+  //   checkModels();
+  // }, []);
 
   return (
     <>

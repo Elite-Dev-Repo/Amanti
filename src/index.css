@@ -9,6 +9,11 @@
 * {
   font-family: "Quicksand", sans-serif;
 }
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 
 .cont::before {
   content: "";

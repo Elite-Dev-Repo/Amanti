@@ -9,6 +9,7 @@ import {
   Download01Icon,
   Cancel01Icon,
   FavouriteIcon,
+  MoreVerticalIcon,
 } from "@hugeicons/core-free-icons";
 
 const Val = () => {
@@ -16,6 +17,7 @@ const Val = () => {
   const [generatedNote, setGeneratedNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const cardRef = useRef(null);
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -27,7 +29,7 @@ const Val = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `Write a short, heartfelt, and unique Valentine's Day message for ${formData.name}. 
                       Context: ${formData.details}. 
-                      Make it authentic, sweet, and intimate. Max 120 words.`;
+                      Make it authentic, sweet, and intimate. Max 165 words.`;
 
       const result = await model.generateContent(prompt);
       setGeneratedNote(result.response.text());
@@ -113,6 +115,38 @@ const Val = () => {
               >
                 <HugeiconsIcon icon={Cancel01Icon} size={32} />
               </button>
+              <button
+                onClick={() => setShowOptions(!showOptions)}
+                className="absolute -top-12 left-0 text-white/80 bg-white/40 rounded-md backdrop-blur-md hover:text-white transition-colors"
+              >
+                <HugeiconsIcon icon={MoreVerticalIcon} size={32} />
+              </button>
+
+              <div
+                className="bg-white flex flex-col gap-4 justify-center shadow-md w-fit absolute top-0 left-0"
+                style={{ display: showOptions ? "flex" : "none" }}
+              >
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedNote);
+                    toast.success("Copied!");
+                    setShowOptions(false);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2  text-slate-700font-semibold hover:bg-slate-50"
+                >
+                  <HugeiconsIcon icon={Copy01Icon} size={20} /> Copy
+                </button>
+                <button
+                  onClick={() => {
+                    downloadImage();
+                    setShowOptions(false);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2  text-slate-700  font-semibold hover:bg-slate-50"
+                >
+                  <HugeiconsIcon icon={Download01Icon} size={20} /> Download
+                  Card
+                </button>
+              </div>
 
               {/* The Result Card */}
               <div className="bg-white rounded-lg overflow-hidden shadow-2xl ">
@@ -126,7 +160,7 @@ const Val = () => {
                     size={40}
                   />
 
-                  <p className="font-serif text-md md:text-md text-slate-800 leading-wide max-w-lg">
+                  <p className="font-serif text-[.9em] md:text-md text-slate-800 leading-wide max-w-lg">
                     "{generatedNote}"
                   </p>
 
@@ -135,26 +169,6 @@ const Val = () => {
                       For {formData.name}
                     </p>
                   </div>
-                </div>
-
-                {/* Modal Actions */}
-                <div className="bg-rose-50/50 p-3 flex gap-4 justify-center border-t border-rose-100">
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(generatedNote);
-                      toast.success("Copied!");
-                    }}
-                    className="flex items-center gap-2 px-3 py-2 bg-white text-slate-700 rounded-xl shadow-sm hover:bg-slate-50 transition-all font-semibold border border-rose-100"
-                  >
-                    <HugeiconsIcon icon={Copy01Icon} size={20} /> Copy
-                  </button>
-                  <button
-                    onClick={downloadImage}
-                    className="flex items-center gap-2 px-3 py-2 bg-rose-500 text-white rounded-xl shadow-md hover:bg-rose-600 transition-all font-semibold"
-                  >
-                    <HugeiconsIcon icon={Download01Icon} size={20} /> Download
-                    Card
-                  </button>
                 </div>
               </div>
             </div>

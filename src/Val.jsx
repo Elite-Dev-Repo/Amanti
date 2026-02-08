@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import html2canvas from "html2canvas";
 import { Toaster, toast } from "sonner";
@@ -16,7 +16,7 @@ const Val = () => {
   const [formData, setFormData] = useState({
     name: "",
     details: "",
-    style: "",
+    style: "authentic",
   });
   const [generatedNote, setGeneratedNote] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,9 @@ const Val = () => {
     if (!formData.name) return toast.error("Please enter a name!");
     setLoading(true);
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash-lite",
+      });
       const prompt = `Write a short, heartfelt, and unique Valentine's Day message for ${formData.name}. 
                       Context: ${formData.details}. 
                       Make it ${formData.style}, sweet, and intimate. Max 165 words.`;
@@ -40,7 +42,7 @@ const Val = () => {
       setShowModal(true);
     } catch (error) {
       console.log(error);
-      toast.error("Generation failed. Check connection.");
+      toast.error("Generation failed. Daily Quota exceeded.");
     }
     setLoading(false);
   };
@@ -59,6 +61,26 @@ const Val = () => {
       toast.success("Card downloaded! 🎀");
     }
   };
+
+  // Add this inside your Val component
+  useEffect(() => {
+    const checkModels = async () => {
+      try {
+        // Note: Some SDK versions don't expose listModels directly on the genAI object
+        // This is the standard way for the web SDK:
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+        );
+        const data = await response.json();
+        console.log("--- AVAILABLE MODELS ---");
+        data.models.forEach((m) => console.log(m.name.replace("models/", "")));
+        console.log("-------------------------");
+      } catch (err) {
+        console.error("Could not fetch model list", err);
+      }
+    };
+    checkModels();
+  }, []);
 
   return (
     <>
@@ -100,9 +122,10 @@ const Val = () => {
 
             <select
               className="w-full p-4 bg-white/50 border border-rose-100 rounded-2xl focus:ring-2 focus:ring-rose-400 outline-none transition-all h-15 resize-none placeholder:text-slate-400"
-              onChange={(e) =>
-                setFormData({ ...formData, style: e.target.value })
-              }
+              onChange={(e) => {
+                console.log(e.target.value);
+                setFormData({ ...formData, style: e.target.value });
+              }}
             >
               <option value="authentic">Authentic</option>
               <option value="romantic">Romantic</option>

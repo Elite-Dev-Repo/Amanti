@@ -69,7 +69,7 @@ const Val = () => {
           </div>
 
           <h1 className="text-3xl font-bold text-slate-800 mb-2 text-center tracking-tight">
-            Val Note AI
+            Amanti AI
           </h1>
           <p className="text-slate-500 text-sm text-center mb-8">
             Create a message as unique as they are.

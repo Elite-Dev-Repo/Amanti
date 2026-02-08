@@ -35,7 +35,7 @@ const Val = () => {
       });
       const prompt = `Write a short, heartfelt, and unique Valentine's Day message for ${formData.name}. 
                       Context: ${formData.details}. 
-                      Make it ${formData.style}, sweet, and intimate. Max 165 words.
+                      Make it ${formData.style} (important), sweet, and intimate. Max 165 words.
                       do not include any emojis and if i do npt explicitly tell you some details about the person, do not include any details about the person or any experiences. just the message `;
 
       const result = await model.generateContent(prompt);

@@ -40,7 +40,7 @@ const Val = () => {
 
       const result = await model.generateContent(prompt);
       setGeneratedNote(result.response.text().trim());
-
+      console.log(formData.style);
       setShowModal(true);
     } catch (error) {
       console.log(error);

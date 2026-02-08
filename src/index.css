@@ -15,6 +15,11 @@ body {
   overflow: hidden;
 }
 
+::selection {
+  background-color: #f43f5e;
+  color: #fff;
+}
+
 .cont::before {
   content: "";
   position: absolute;

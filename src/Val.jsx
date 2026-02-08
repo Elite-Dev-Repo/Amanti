@@ -13,10 +13,11 @@ import {
 } from "@hugeicons/core-free-icons";
 
 const Val = () => {
-  const [formData, setFormData] = useState(
-    { name: "", details: "" },
-    { style: "" },
-  );
+  const [formData, setFormData] = useState({
+    name: "",
+    details: "",
+    style: "",
+  });
   const [generatedNote, setGeneratedNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);

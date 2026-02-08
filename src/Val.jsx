@@ -13,7 +13,10 @@ import {
 } from "@hugeicons/core-free-icons";
 
 const Val = () => {
-  const [formData, setFormData] = useState({ name: "", details: "" });
+  const [formData, setFormData] = useState(
+    { name: "", details: "" },
+    { style: "" },
+  );
   const [generatedNote, setGeneratedNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +32,7 @@ const Val = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `Write a short, heartfelt, and unique Valentine's Day message for ${formData.name}. 
                       Context: ${formData.details}. 
-                      Make it authentic, sweet, and intimate. Max 165 words.`;
+                      Make it ${formData.style}, sweet, and intimate. Max 165 words.`;
 
       const result = await model.generateContent(prompt);
       setGeneratedNote(result.response.text());
@@ -87,12 +90,26 @@ const Val = () => {
             />
 
             <textarea
-              className="w-full p-4 bg-white/50 border border-rose-100 rounded-2xl focus:ring-2 focus:ring-rose-400 outline-none transition-all h-28 resize-none placeholder:text-slate-400"
+              className="w-full p-4 bg-white/50 border border-rose-100 rounded-2xl focus:ring-2 focus:ring-rose-400 outline-none transition-all h-20 resize-none placeholder:text-slate-400"
               placeholder="What makes them special?"
               onChange={(e) =>
                 setFormData({ ...formData, details: e.target.value })
               }
             />
+
+            <select
+              className="w-full p-4 bg-white/50 border border-rose-100 rounded-2xl focus:ring-2 focus:ring-rose-400 outline-none transition-all h-15 resize-none placeholder:text-slate-400"
+              onChange={(e) =>
+                setFormData({ ...formData, style: e.target.value })
+              }
+            >
+              <option value="authentic">Authentic</option>
+              <option value="romantic">Romantic</option>
+              <option value="funny">Funny</option>
+              <option value="sweet">Sweet</option>
+              <option value="intimate">Intimate</option>
+              <option value="flirty">Flirty</option>
+            </select>
 
             <button
               onClick={generateNote}
